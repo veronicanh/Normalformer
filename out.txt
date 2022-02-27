@@ -1,0 +1,141 @@
+┌─────────────────────┐
+│ R(A, B, C, D, E, F) │
+├─────────────────────┤
+│ A B → C             │
+│ B → E               │
+│ D → E               │
+│ D → F               │
+└─────────────────────┘
+
+
+
+
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+ Finner alle kandidatnøklene til relasjonen R
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+Attributter aldri på høyreside (må være med i alle kandidatnøkler): A B D
+Attributter som kun er på høyreside (aldri med i kandidatnøkkel)  : C E F
+Attributter som vi potensielt kan utvide med (er på begge sidene) : Ingen
+
+Sjekker først om {A B D} er en kandidatnøkkel ved å beregne tillukningen: {A B D}+ = {A B D C E F}
+Siden tillukningen inneholder alle attributtene til relasjonen, så er dette en kandidatnøkkel.
+Alle videre utvidelser vil føre til ikke-minimale supernøkler, altså er {A B D} den eneste kandidatnøkkelen til R. 
+
+
+
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+ Finner den høyeste normalformen som R tilfredsstiller
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+Skriver om FDer til å kun ha ett attributt på høyresiden:
+A B → C
+B → E
+D → E
+D → F
+
+Kandidatnøkkelene til R: {A B D}
+
+Går igjennom hver FD og sjekker om de bryter med BCNF/3NF/2NF:
+A B → C
+ - Brudd på BCNF siden {A B} ikke er en supernøkkel, går til neste punkt.
+ - Brudd på 3NF siden C ikke er et nøkkelattributt, går til neste punkt.
+ - Brudd på 2NF siden {A B} er en del av en kandidatnøkkel.
+
+Relasjonen er på den laveste normalformen av alle FDene, så relasjonen er på 1NF.
+Siden dette er den laveste normalformen en relasjon kan ha, trenger jeg ikke å fortsette å sjekke FDene. 
+
+
+
+┌────────────────┐
+│ S1(A, B, C, E) │
+├────────────────┤
+│ A B → C        │
+│ B → E          │
+└────────────────┘
+┌────────────────┐
+│ S2(B, A, D, F) │
+├────────────────┤
+│ D → F          │
+└────────────────┘
+┌───────────┐
+│ S11(B, E) │
+├───────────┤
+│ B → E     │
+└───────────┘
+┌──────────────┐
+│ S12(B, A, C) │
+├──────────────┤
+│ A B → C      │
+└──────────────┘
+┌───────────┐
+│ S21(D, F) │
+├───────────┤
+│ D → F     │
+└───────────┘
+┌──────────────┐
+│ S22(D, B, A) │
+├──────────────┤
+│ Ingen        │
+└──────────────┘
+Kandidatnøkkelene til R: {A B D}
+
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+ Tapsfri dekomponering av relasjonen R til BCNF
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+Relasjonen: R(A, B, C, D, E, F)
+
+Kandidatnøkkelene til R: {A B D}
+
+Skriver om FDer til å kun ha ett attributt på høyresiden:
+A B → C
+B → E
+D → E
+D → F
+
+-=( Relasjon: R )=-
+Går gjennom hver FD og sjekker om noen bryter med BCNF:
+ - A B → C: Bryter med BCNF siden {A B} ikke er en supernøkkel.
+Relasjonen bryter med BCNF siden en av FDene gjør det, og må derfor dekomponeres.
+
+Beregner tillukningen til FDen som bryter: {A B}+ = {A B C E}
+Dekomponerer R til:
+ - S1(A, B, C, E). FDer: AB→C, B→E. Kandidatnøkkel: {A B}.
+   Fortsetter med S1.
+
+ - S2(B, A, D, F). FDer: D→F. Kandidatnøkkel: {A B D}.
+   Fortsetter med S2.
+
+
+-=( Relasjon: S1 )=-
+Går gjennom hver FD og sjekker om noen bryter med BCNF:
+ - A B → C: Bryter ikke med BCNF siden {A B} er en supernøkkel.
+ - B → E: Bryter med BCNF siden {B} ikke er en supernøkkel.
+Relasjonen bryter med BCNF siden en av FDene gjør det, og må derfor dekomponeres.
+
+Beregner tillukningen til FDen som bryter: {B}+ = {B E}
+Dekomponerer S1 til:
+ - S11(B, E). FDer: B→E. Kandidatnøkkel: {B}.
+   Ser at denne er på BCNF fordi kun en FD holder, så venstresiden tilsvarer kandidatnøkkelen. Trenger ikke å dekomponere denne videre.
+
+ - S12(B, A, C). FDer: AB→C. Kandidatnøkkel: {A B}.
+   Ser at denne er på BCNF fordi kun en FD holder, så venstresiden tilsvarer kandidatnøkkelen. Trenger ikke å dekomponere denne videre.
+
+
+-=( Relasjon: S2 )=-
+Går gjennom hver FD og sjekker om noen bryter med BCNF:
+ - D → F: Bryter med BCNF siden {D} ikke er en supernøkkel.
+Relasjonen bryter med BCNF siden en av FDene gjør det, og må derfor dekomponeres.
+
+Beregner tillukningen til FDen som bryter: {D}+ = {D F}
+Dekomponerer S2 til:
+ - S21(D, F). FDer: D→F. Kandidatnøkkel: {D}.
+   Ser at denne er på BCNF fordi kun en FD holder, så venstresiden tilsvarer kandidatnøkkelen. Trenger ikke å dekomponere denne videre.
+
+ - S22(D, B, A). FDer: Ingen. Kandidatnøkkel: {A B D}.
+   Siden relasjonen ikke har noen FDer så er den på BCNF, og må ikke dekomponeres videre.
+
+
+Resultatet av den tapsfrie dekomponeringen av R(A, B, C, D, E, F):
+ - S11(B, E)
+ - S12(B, A, C)
+ - S21(D, F)
+ - S22(D, B, A)
